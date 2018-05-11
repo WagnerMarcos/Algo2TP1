@@ -1,0 +1,369 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[left=1.5cm,top=2cm,right=1.5cm,bottom=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{float}%para poder usa argumento H en por ejemplo imagenes
+\usepackage{comment}
+
+\usepackage{titlesec}
+\renewcommand{\thesection}{\arabic{section}}
+\setcounter{secnumdepth}{4} %Para poner sub subsecciones (\subsubsection{<subsection>}) y para un nivel mas de subsección hay que poner \paragraph{<subsubsubsection>}
+\titlelabel{\thetitle.\quad} %Para que ponga un punto desdpues de numerar una sección
+
+\usepackage{listings}
+
+\lstset{literate=
+  {¡}{{!`}}1  {¿}{{¿`}}1
+  {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+  {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+  {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+  {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+  {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+  {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+  {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+  {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+  {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+  {ű}{{\H{u}}}1 {Ű}{{\H{U}}}1 {ő}{{\H{o}}}1 {Ő}{{\H{O}}}1
+  {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+  {€}{{\EUR}}1 {£}{{\pounds}}1
+}
+\lstset{extendedchars=\true,
+    linewidth=\textwidth,
+    inputencoding=utf8x,
+    language=C++,
+    xleftmargin=5pt,
+    xrightmargin=5pt,
+    breaklines=true,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbers=left,%          Que haya números a la izquierda (número de linea)
+    numbersep=5pt,
+    tabsize=3,showtabs=false,
+    basicstyle=\ttfamily\small,%    Estilo básico de la tipografía del código
+    commentstyle=\color{Gray},%     Color de los comentarios
+    showstringspaces=false,%        Los espacios no se ven de forma especial
+    stringstyle=\color{BrickRed},%  Estilo de las cadenas
+    keywordstyle=\color{ForestGreen},%  Estilo de las palabras reservadas
+    morekeywords=[1]{size_t,ssize_t},%  Definición de más palabras reservadas
+    deletekeywords={typedef,enum,do,while,if,else,for,case,default,switch,break,continue},%
+        keywords=[2]{typedef,enum,do,while,if,else,for,case,default,switch,break,continue,EXIT_SUCCESS,EXIT_FAILURE},
+    keywordstyle=[2]{\color{BurntOrange}},% 2do grupo de palabras reservadas
+        directives={define,undef,include,if,else,ifndef,ifdef,elif,endif},%
+    directivestyle=\color{NavyBlue},%       Estilo de directivas
+    keywords=[3]{define,undef,include,if,else,ifndef,ifdef,elif,endif},%
+    keywordstyle=[3]{\color{MidnightBlue}},%3er grupo de palabras reservadas
+    morecomment=[s][\color{Gray}]{/*}{*/}%  Definición de estilo de comentario
+    }  
+
+\usepackage{color}
+\definecolor{Apricot}{RGB}{253,199,130}
+\definecolor{Aquamarine}{RGB}{0,181,202}
+\definecolor{Bittersweet}{RGB}{192,79,23}
+\definecolor{Black}{RGB}{0,0,0}
+\definecolor{Blue}{RGB}{0,0,255}
+\definecolor{BlueGreen}{RGB}{0,179,184}
+\definecolor{BlueViolet}{RGB}{71,57,146}
+\definecolor{BrickRed}{RGB}{182,50,28}
+\definecolor{Brown}{RGB}{121,37,0}
+\definecolor{BurntOrange}{RGB}{247,146,29}
+\definecolor{CadetBlue}{RGB}{116,114,154}
+\definecolor{CarnationPink}{RGB}{242,130,180}
+\definecolor{Cerulean}{RGB}{0,162,227}
+\definecolor{CornflowerBlue}{RGB}{65,176,228}
+\definecolor{Cyan}{RGB}{0,174,239}
+\definecolor{Dandelion}{RGB}{253,188,66}
+\definecolor{DarkOrchid}{RGB}{164,83,138}
+\definecolor{Emerald}{RGB}{0,169,157}
+\definecolor{ForestGreen}{RGB}{0,155,85}
+\definecolor{Fuchsia}{RGB}{140,54,140}
+\definecolor{Goldenrod}{RGB}{255,223,66}
+\definecolor{Gray}{RGB}{148,150,152}
+\definecolor{Green}{RGB}{0,166,79}
+\definecolor{GreenYellow}{RGB}{223,230,116}
+\definecolor{JungleGreen}{RGB}{0,169,154}
+\definecolor{Lavender}{RGB}{244,158,196}
+\definecolor{LimeGreen}{RGB}{141,199,62}
+\definecolor{Magenta}{RGB}{236,0,140}
+\definecolor{Mahogany}{RGB}{169,52,31}
+\definecolor{Maroon}{RGB}{175,50,53}
+\definecolor{Melon}{RGB}{248,158,123}
+\definecolor{MidnightBlue}{RGB}{0,103,149}
+\definecolor{Mulberry}{RGB}{169,60,147}
+\definecolor{NavyBlue}{RGB}{0,103,149}
+\definecolor{OliveGreen}{RGB}{60,128,49}
+\definecolor{Orange}{RGB}{245,129,55}
+\definecolor{OrangeRed}{RGB}{237,19,90}
+\definecolor{Orchid}{RGB}{175,114,176}
+\definecolor{Peach}{RGB}{247,150,90}
+\definecolor{Periwinkle}{RGB}{121,119,184}
+\definecolor{PineGreen}{RGB}{0,139,114}
+\definecolor{Plum}{RGB}{146,38,143}
+\definecolor{ProcessBlue}{RGB}{0,176,240}
+\definecolor{Purple}{RGB}{153,71,155}
+\definecolor{RawSienna}{RGB}{151,64,6}
+\definecolor{Red}{RGB}{237,27,35}
+\definecolor{RedOrange}{RGB}{242,96,70}
+\definecolor{RedViolet}{RGB}{161,36,107}
+\definecolor{Rhodamine}{RGB}{239,85,159}
+\definecolor{RoyalBlue}{RGB}{0,113,188}
+\definecolor{RoyalPurple}{RGB}{97,63,153}
+\definecolor{RubineRed}{RGB}{237,1,125}
+\definecolor{Salmon}{RGB}{246,146,137}
+\definecolor{SeaGreen}{RGB}{63,188,157}
+\definecolor{Sepia}{RGB}{103,24,0}
+\definecolor{SkyBlue}{RGB}{70,197,221}
+\definecolor{SpringGreen}{RGB}{198,220,103}
+\definecolor{Tan}{RGB}{218,157,118}
+\definecolor{TealBlue}{RGB}{0,174,179}
+\definecolor{Thistle}{RGB}{216,131,183}
+\definecolor{Turquoise}{RGB}{0,180,206}
+\definecolor{Violet}{RGB}{88,66,155}
+\definecolor{VioletRed}{RGB}{239,88,160}
+\definecolor{White}{RGB}{255,255,255}
+\definecolor{WildStrawberry}{RGB}{238,41,103}
+\definecolor{Yellow}{RGB}{255,242,0}
+\definecolor{YellowGreen}{RGB}{152,204,112}
+\definecolor{YellowOrange}{RGB}{250,162,26}
+
+\begin{document}
+	
+	\begin{titlepage}
+
+	\begin{center}
+
+		\vspace*{0.2mm}
+			\begin{figure}[htp]
+				\begin{center}
+					\includegraphics[scale=1]{logo1.jpg} 
+				\end{center}
+			\end{figure} 
+
+			FACULTAD DE INGENIERÍA \\
+			DE LA \\
+			UNIVERSIDAD DE BUENOS AIRES\\
+		
+		\vspace*{0.20in}
+	
+			\begin{Large}
+				Algoritmos y Programación II [95.12]\\
+			\end{Large}	
+			
+		\vspace*{1cm}
+	
+			\begin{huge}
+				Trabajo Práctico n.° 0:\\
+			\end{huge}
+		
+		\vspace*{0.75cm}
+	
+			\begin{Huge}
+				\textbf{Programación C++} \\
+			\end{Huge}
+		
+		\vspace*{1.75cm}
+		
+		
+				
+			\begin{large}
+				\begin{description}
+					\item[\hspace{0.15 cm}Integrantes:]
+						Grassi, Tomás Miguel ($99551$) - tomas96@gmail.com 					
+					\item[\hspace{0.15 cm}\textcolor{white}{Integrantes:}]
+						Martinez Mikulic, Mateo ($99602$) - mmartinezmikulic@gmail.com
+					\item[\hspace{0.15 cm}\textcolor{white}{Integrantes:}]
+						Wagner, Marcos ($98607$) - marcoswagneer.18@gmail.com
+					\item[\hspace{1.4 cm}\textcolor{white}{aux}]
+					\item[\hspace{0.10 cm}Profesor:]
+						Ing. Calvo, Patricia
+					\item[\hspace{0.10 cm}\textcolor{white}{Profesor:}]	
+						Ing. Santi, Leandro
+					\item[\hspace{0.10 cm}\textcolor{white}{Profesor:}]	
+						Lic. Santi, Lucio
+				\end{description}
+			\end{large}
+			
+		
+		\vspace*{0.8 cm}
+	
+		\rule{80mm}{0.1mm}\\
+	
+		\vspace*{0.1in}
+	
+			\begin{large}
+				Curso 1 \\
+				Jueves 10 de Mayo de 2018 \\
+			\end{large}
+		
+	\end{center}
+
+\end{titlepage}		
+
+	\section{Introducción}	
+		
+		\indent En este trabajo se busca obtener conocimientos de programación en el lenguaje C++. Para ello se
+		realiza un programa en dicho lenguaje implementando la transformada discreta de Fourier (DFT) y su transformada
+		inversa (IDFT).
+		
+	\section{Diseño e implementación del programa}	
+	
+        \subsection{Diseño del programa}
+            \indent Se implementó para este programa la clase Complex y la clase Vector, ambas implementadas como templates.
+            De esta forma se logra una mayor simplicidad, ya que se codifica una única función sin importar el tipo de dato que
+            se le pase como parámetro, logrando un código más mantenible. Además, a partir del uso del uso de templates se logra una
+            generalización de cada clase, ya que la misma se puede utilizar para distintos tipos de datos. Por ejemplo, la clase vector,
+            gracias a la implementación en forma de plantilla, es posible que cada instancia del vector contenga cualquier objeto, como
+            un complejo, o tipo de dato que se necesite. 
+            \\
+            \indent La clase Complex es utilizada para cargar cada uno de los datos leídos y dentro de la clase Vector se ordenan en
+            orden leído cada uno de los objetos de la clase Complex. 
+   			\\
+			\indent Para la clase Complex se sobrecargaron los operadores correspondientes a la suma, resta, multiplicación, 
+			división, los cuales son utilizados en la implementación de la DFT y la IDFT. Además se sobrecargaron los operadores
+			de asignación, negación y comparación. De esta forma se logra un código más mantenible y legible. Por otro lado para 
+			la clase vector se sobrecargaron los operadores de asignación e indexación. 
+            \\
+            \indent Se definió un tipo de dato enumerativo para indicar al programa si debe realizar la DFT o la IDFT variando en
+			la función de la transformada el coeficiente en el exponente, y en el caso de la IDFT multiplicando por la inversa
+			de N. Con esto se evita repetir el código en cada transformada.
+			\\
+			\indent Por último, además de las dos clases creadas, se utilizó el código provisto para el manejo de argumentos,
+			realizando los cambios necesarios para que parsee el archivo de señales, de forma que lea una señal por línea.
+
+
+		\subsection{Interfaz}
+
+			\indent La interacción con el programa es a través de comandos en línea de ordenes. Tanto la entrada 
+			como la salida, puede direccionarse desde o hacia un archivo utilizando el flag correspondiente (\textit{-i, -o}
+			respectivamente) seguido del nombre del archivo. En caso de no indicar ningún archivo, el programa utiliza los 
+			flujos standar de entrada (por teclado) y salida (por pantalla). Por otro lado, también es posible indicar el método 
+			de transformación que se desea utilizar a partir del flag de método \textit{-m} e indicando luego el método por su
+			abreviatura (DFT o IDFT). En caso de que esta opción no sea indicada, el programa realiza la DFT por defecto.
+
+		\subsection{Formato de entrada y salida}
+
+			\indent El archivo de entrada será un archivo de texto con pares ordenados de complejos (re, im), separados por
+			espacios. Cada línea en el archivo de entrada será una señal diferente. La salida tendrá el mismo formato, siendo 
+			cada línea la transformada o antitransformada de la señal correspondiente. 
+
+
+	\section{Corridas de prueba}
+	 
+		\indent Para realizar las pruebas de funcionamiento decidimos usar Google C++ Testing Framework, una herramienta que 
+		permite que las pruebas sean independientes y repetibles. Permite separar las pruebas en módulos separados, reflejando 
+		la estructura del código evaluado y logrando de esta manera que sea mas entendible y mantenible. Al fallar una prueba, 
+		según la naturaleza de la falla, la prueba puede seguir desarrollándose o simplemente detener ese módulo para continuar 
+		con el siguiente. 	
+		\\
+		\indent En este proyecto se realizaron pruebas sobre las clases desarrolladas y luego sobre el procesamiento de datos.
+		Al realizar pruebas sobre las clases se verificó que las funciones correspondientes a la clase Complex funcionaran 
+		correctamente, tomando como patrón de comparación la clase \textit{std::complex} definida en el archivo de cabecera
+		\textit{<complex.h>} provisto por la biblioteca estándar de C++. Al desarrollar las pruebas de procesamiento de datos 
+		el enfoque fue primero la verificación del correcto funcionamiento tanto de la función \textit{DFT()} como de la 
+		función \textit{IDFT()} y luego la robustez del proceso, realizando pruebas que variaban en el volumen de datos 
+		pseudo-aleatorios obtenidos con \textit{rand()}.
+		\\
+		\indent Probando la clase Complex de esta manera, se descubrió que la forma en que se estaba implementando la función
+		\textit{exp()},	que calcula la exponencial compleja, difería de los valores obtenidos con \textit{std::exp()} en algunos 
+		casos: en general, dentro de los 10 000 000 de números que se probaba, fallaba en alrededor de 20. Esto se debía a que
+		la función de comparación implementada con el fin de que las comparaciones tengan en cuenta una cierta tolerancia debida
+		a los errores propios de la aritmética de punto flotante no manejaban adecuadamente el valor inf.
+		\\
+		\indent Asimismo, se realizaron pruebas para determinar cuál debía ser el valor máximo en que pueden diferir dos números
+		para ser considerados iguales. Para esto se fueron ejecutando las pruebas creadas para números complejos y para la DFT variando,
+		de a potencias de diez, el factor por el que se multiplicaba a \textit{std::numeric\_limits<long double>::epsilon()}, el cual es
+		la diferencia mínima que debe	haber	entre 1 y un número para que éste sea considerado el siguiente valor respresentable. 
+		De esta forma se llegó a una cota en el valor mínimo de comparación: $10^{-6}$.
+		\\
+		\indent Para ejecutar las pruebas sólo es necesario usar el comando make y luego ejecutar el programa de pruebas;
+		éstas informan si alguno de los resultados no es el esperado.
+
+
+	\section{Problemas durante el desarrollo y soluciones}
+		
+        \indent A partir de las pruebas realizadas, se detectaron mínimas fallas en la función exponencial de la clase Complex (2 en
+        un millón de números) al cargar el vector con una extrema cantidad de complejos. Al corregir dicho error, el tiempo de 
+        ejecución de las funciones afectadas se duplicó. A pesar de que la falla podría considerarse despreciable, se corrigió procurando
+        una mayor robustez y resignando eficiencia.   
+
+	\section{Posibles mejoras}
+
+		\indent El aspecto principal a mejorar es la eficiencia del algoritmo diseñado para calcular la transformada discreta de Fourier
+		y su inversa, dado que este se implementó de la forma más simple posible, utilizando una iteración muy ineficiente. Se consideraron 
+		distintas alternativas para mejorarlo, como utilizar una matriz que contenga las exponenciales complejas utilizadas en la transformación
+		y de esta forma evitar realizar dichas operaciones de forma repetida. Además, investigando y estudiando dicha matriz algebraicamente, se
+		encontró que esta resulta una matriz hermética, lo cual simplificaría su construcción disminuyendo más aún la cantidad de operaciones
+		necesarias para la transformación.
+		\\
+		\indent	Por otro lado, la DFT se podría realizar de manera más eficiente utilizando el algoritmo de la FFT, Fast Fourier Transform. Este 
+		algoritmo fue extensamente estudiado y perfeccionado, y es comunmente utilizado para realizar esta transformada.  
+
+	\section{Conclusiones}
+	
+		\indent	EL programa cumple su función de manera eficaz, aunque se podría realizar ciertas mejoras para que sea más eficiente. Utilizar
+		herramientas como Google C++ Testing Framework facilita la tarea de probar el funcionamiento y permite de manera sencilla verificar el
+		funcionamiento a medida que diferentes cambios son realizados al código.
+
+	\section{Bibliografía}
+		
+		\begin{itemize}
+		\item Ghezzi, Carlo \& Jazayeri, Mehdi \& Mandrioli, Dino (1991). \textit{Fundamentals of Software Engineering} ($1.^{era}$ ed.) Upper Saddle River, NJ 07458: Prentice Hall, Inc.
+		\item Stroustrup, Bjarne  (1988). \textit{The C++ Programming Language}  ($4.^{ta}$ ed.) Upper Saddle River, NJ 07458: Addison-Wesley.
+		\end{itemize}
+
+	\section{Script de compilación}
+	
+		makefile
+		\lstinputlisting[frame=single]{makefile}
+				
+	\section{Código fuente}
+	
+		main.h
+		\lstinputlisting[frame=single]{main.h}
+
+   		main.cpp
+		\lstinputlisting[frame=single]{main.cpp}
+
+		cmdline.h
+		\lstinputlisting[frame=single]{cmdline.h}
+		
+		cmdline.cpp
+		\lstinputlisting[frame=single]{cmdline.cpp}		
+		
+		io.h
+		\lstinputlisting[frame=single]{io.h}
+
+		io.cpp
+		\lstinputlisting[frame=single]{io.cpp}
+
+		DFT.h
+		\lstinputlisting[frame=single]{DFT.h}
+		
+		DFT.cpp
+		\lstinputlisting[frame=single]{DFT.cpp}
+						
+		Vector.h
+		\lstinputlisting[frame=single]{Vector.h}
+		
+		Complex.h
+		\lstinputlisting[frame=single]{Complex.h}
+
+		DFT\_test.h
+		\lstinputlisting[frame=single]{DFT_test.h}
+
+		DFT\_test.cpp
+		\lstinputlisting[frame=single]{DFT_test.cpp}
+
+		Complex\_test.h
+		\lstinputlisting[frame=single]{Complex_test.h}
+
+		Complex\_test.cpp
+		\lstinputlisting[frame=single]{Complex_test.cpp}
+
+		
+		
+	
+
+\end{document}
