@@ -2,10 +2,65 @@
 en main se instancia FT, y luego de procesar lo ingresado por usuario se setea que clase es _pb
 ej: _pb = new DFT ( input , output )
 */
+#ifndef _STRATEGY_H_INCLUDED_
+#define  _STRATEGY_H_INCLUDED_
 
+
+#include "Complex.h"
+#include "Vector.h"
+
+class IProcessBehavior;
+
+class FT{
+
+	IProcessBehavior* _pb;
+	size_t chosen_method;
+	size_t NumberOfMethods=2;
+public:
+
+	enum StrategyType
+	{
+		DFT_method, IDFT_method
+	};
+
+	FT()
+	{
+		_pb = NULL;
+	}
+
+	~FT() {}
+
+	bool
+	SetFT(size_t method)
+	{
+		if(chosen_method>NumberOfMethods)
+			return false;
+		delete _pb;
+		if(method == DFT_method)
+			_pb = new DFT( input , output );
+		if(method == IDFT_method)
+			_pb = new IDFT( input , output );
+		return true;
+	}
+
+	void 
+	run()
+	{
+		_pb -> process();
+	}
+};
 
 class IProcessBehavior{
 
+	IProcessBehavior() = 0;
+	coefficient() = 0 ;
+
+public:
+	~IProcessBehavior( _pb )
+	{
+		delete _pb;
+		_pb = NULL;
+	} 
 	bool
 	transform( ComplexVector const & input, ComplexVector & output )
 	{
@@ -14,7 +69,7 @@ class IProcessBehavior{
 		Complex <> sum = 0;
 		for (size_t i = 0; i < n; ++i) {
 			for (size_t j = 0; j < n; ++j) {
-				sum += input[j] * coefficient(i, j, n, method);
+				sum += input[j] * coefficient(i, j, n);
 			}
 			output.push_back(sum);
 			sum = 0;
@@ -23,69 +78,45 @@ class IProcessBehavior{
 	}
 
 
-	coefficient() = 0 ;
 };
 
-class FT{
-	IProcessBehavior* _pb;
 
+class DFT : public IProcessBehavior {
 
 public:
-
-	enum StrategyType{
-		DFT, IDFT
-	};
-
-	FT(){
+	DFT() { }
+	
+	~IDFT( _pb ) 
+	{
+		delete _pb;
 		_pb = NULL;
 	}
 
-	void SetFT( size_t method ){
-		delete _pb;
-		if(method == DFT)
-			_pb = new DFT( input , output );
-		if(method == IDFT)
-			_pb = new IDFT( input , output );
-	
-	}
-
-	void run(){
-		_pb -> process();
-	}
-
-
-};
-
-	bool
-	transform(ComplexVector const & input, ComplexVector & output, TransformType const & method)
+	inline const Complex <>
+	coefficient( int const i, int const j, int const n )
 	{
-		size_t n = input.size();
-		output.reserve(n);
-		Complex <> sum = 0;
-		for (size_t i = 0; i < n; ++i) {
-			for (size_t j = 0; j < n; ++j) {
-				sum += input[j] * coefficient(i, j, n, method);
-			}
-			output.push_back(sum);
-			sum = 0;
-		}
-		return true;
+		return exp(I * -2.0 * M_PI * i * j / n)
+	}
+};
+
+class IDFT : public IProcessBehavior {
+
+public:
+	
+	IDFT() { }
+
+	~IDFT( _pb ) 
+	{
+		delete _pb;
+		_pb = NULL;
 	}
 
-	class DFT : public IProcessBehavior {
-
-		inline const Complex <>
-		coefficient( int const i, int const j, int const n )
-		{
-			return exp(I * -2.0 * M_PI * i * j / n);
-			}
-		}
-	};
-
-	class IDFT : public IProcessBehavior {
-		inline const Complex <>
-		coefficient( int const i, int const j, int const n )
-		{
-			return exp(I * -2.0 * M_PI * i * j / n);
-		}
+	inline const Complex <>
+	coefficient( int const i, int const j, int const n )
+	{
+		return exp(I * -2.0 * M_PI * i * j / n);
+	}
 };
+
+
+#endif

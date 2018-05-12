@@ -6,6 +6,7 @@
 #include "Vector.h"
 #include "DFT.h"
 #include "io.h"
+#include "strategy.h"
 
 static void opt_input(std::string const &);
 static void opt_output(std::string const &);

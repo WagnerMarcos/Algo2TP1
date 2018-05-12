@@ -125,6 +125,7 @@ main(int argc, char * const argv[])
 	ComplexVector outSignal;
 	istringstream line;
 	string s;
+	FT transform;
 
 	for (int lineNo = 1; getline(*iss, s); ++lineNo)
 	{
@@ -138,7 +139,9 @@ main(int argc, char * const argv[])
 		if (!status)
 			print_msg_and_exit("Error processing \"" + line.str() + "\" (line " + to_string(lineNo) + ").");
 
-		status = transform(inSignal, outSignal, chosen_method);
+		status = transform.SetFT(chosen_method);
+
+		status = transform.run(inSignal, outSignal, chosen_method);
 		if (!status)
 			print_msg_and_exit("An error occured while performing the requested operation.");
 

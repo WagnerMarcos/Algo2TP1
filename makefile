@@ -16,7 +16,7 @@ DFT.o: $(SRC)/DFT.cpp $(INCLUDE)/DFT.h $(INCLUDE)/Complex.h $(INCLUDE)/Vector.h
 io.o: $(SRC)/io.cpp $(INCLUDE)/io.h $(INCLUDE)/Complex.h $(INCLUDE)/Vector.h $(INCLUDE)/DFT.h
 	$(CXX) $(CXXFLAGS) $(CXXARGS) -c $(SRC)/io.cpp -o io.o
 
-main.o: $(SRC)/main.cpp $(INCLUDE)/main.h $(INCLUDE)/io.h $(INCLUDE)/Complex.h $(INCLUDE)/Vector.h $(INCLUDE)/cmdline.h $(INCLUDE)/DFT.h
+main.o: $(SRC)/main.cpp $(INCLUDE)/main.h $(INCLUDE)/io.h $(INCLUDE)/Complex.h $(INCLUDE)/Vector.h $(INCLUDE)/cmdline.h $(INCLUDE)/DFT.h $(INCLUDE)/strategy.h
 	$(CXX) $(CXXFLAGS) $(CXXARGS) -c $(SRC)/main.cpp -o main.o
 
 fourier.exe: cmdline.o DFT.o io.o main.o
