@@ -4,38 +4,35 @@
 #include "Complex.h"
 #include "Vector.h"
 
-class FourierTransform {
-public:
-	FourierTransform(FourierTransform * method) : _method{method} {}
-	~FourierTransform() {}
-	inline bool compute(ComplexVector const & input, ComplexVector & output) {
-		return _method->compute(input, output);
-	}
-private:
-	FourierAlgorithm* _method;
-};
+using ComplexVector = Vector <Complex <long double> >;
 
 class FourierAlgorithm {
 public:
 	virtual bool compute(ComplexVector const & input, ComplexVector & output) = 0;
-protected:
-	FourierAlgorithm();
-	virtual	~FourierAlgorithm();
-}
+};
+
+class FourierTransform {
+public:
+	FourierTransform(FourierAlgorithm *method) : _method(method) {}
+	~FourierTransform() {}
+	inline bool compute(ComplexVector const & input, ComplexVector & output) {
+		return _method? _method->compute(input, output) : false;
+	}
+private:
+	FourierAlgorithm *_method;
+};
 
 class Discrete : public FourierAlgorithm {
 public:
-	Discrete();
-	virtual ~Discrete();
 	bool compute(ComplexVector const & input, ComplexVector & output);
 protected:
-	virtual inline const Complex<> coefficient(size_t, size_t) = 0;
+	virtual const Complex<> coefficient(int const i, int const j, int const n) = 0;
 };
 
 class DFT : public Discrete {
 private:
 	inline const Complex <> coefficient(int const i, int const j, int const n) override {
-		return exp(I * -2.0 * M_PI * i * j / n)
+		return exp(I * -2.0 * M_PI * i * j / n);
 	}
 };
 
