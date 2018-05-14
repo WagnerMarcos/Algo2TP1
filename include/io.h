@@ -3,9 +3,8 @@
 
 #include "Complex.h"
 #include "Vector.h"
-#include "DFT.h"
 
-bool load_signal(std::istream &, DFT::ComplexVector &);
-bool print_signal(std::ostream &, DFT::ComplexVector const &);
+bool load_signal(std::istream &, Vector<Complex<> > &);
+bool print_signal(std::ostream &, Vector<Complex<> > const &);
 
 #endif	//_IO_H_INCLUDED_

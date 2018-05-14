@@ -1,5 +1,5 @@
-#ifndef _STRATEGY_H_INCLUDED_
-#define  _STRATEGY_H_INCLUDED_
+#ifndef _FOURIER_H_INCLUDED_
+#define  _FOURIER_H_INCLUDED_
 
 #include "Complex.h"
 #include "Vector.h"
@@ -9,12 +9,13 @@ using ComplexVector = Vector <Complex <long double> >;
 class FourierAlgorithm {
 public:
 	virtual bool compute(ComplexVector const & input, ComplexVector & output) = 0;
+	virtual ~FourierAlgorithm() {}
 };
 
 class FourierTransform {
 public:
 	FourierTransform(FourierAlgorithm *method) : _method(method) {}
-	~FourierTransform() {}
+	virtual ~FourierTransform() {}
 	inline bool compute(ComplexVector const & input, ComplexVector & output) {
 		return _method? _method->compute(input, output) : false;
 	}
@@ -45,10 +46,7 @@ private:
 
 class Fast : public FourierAlgorithm {
 public:
-	virtual bool compute(ComplexVector const & input, ComplexVector & output);
-protected:
-	Fast();
-	virtual ~Fast();
+	virtual bool compute(ComplexVector const & input, ComplexVector & output) = 0;
 };
 
 class FFT : public Fast {
@@ -61,4 +59,4 @@ public:
 	bool compute(ComplexVector const & input, ComplexVector & output);
 };
 
-#endif
+#endif	// _FOURIER_H_INCLUDED_

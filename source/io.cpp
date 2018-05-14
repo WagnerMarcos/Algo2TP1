@@ -5,10 +5,9 @@
 #include "io.h"
 
 using namespace std;
-using namespace DFT;
 
 bool
-load_signal(istream & is, ComplexVector & input)
+load_signal(istream & is, Vector<Complex<> > & input)
 {
 	Complex <long double> c;
 	while (is >> c)
@@ -19,7 +18,7 @@ load_signal(istream & is, ComplexVector & input)
 }
 
 bool
-print_signal(ostream & os, ComplexVector const & output)
+print_signal(ostream & os, Vector<Complex<> > const & output)
 {
 	for (size_t i = 0; i < output.size(); ++i)
 		os << output[i];

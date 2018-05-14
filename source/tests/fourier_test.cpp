@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "strategy.h"
+#include "fourier_test.h"
 
 using namespace std;
 
@@ -23,12 +23,12 @@ int main() {
 	ComplexVector in(4);
 	for (int i = 0; i < 4; ++i)
 		in[i] = 1;
-	cout << "in:" << endl;
+	cout << "---\nin:" << endl;
 	for (int i = 0; i < 4; ++i)
-		cout << in[i] << "; " << endl;
+		cout << "  " << in[i] << endl;
 	ComplexVector out(4);
 	transform.compute(in, out);
-	cout << "out:" << endl;
+	cout << "---\nout:" << endl;
 	for (int i = 0; i < 4; ++i)
-		cout << out[i] << "; " << endl;
+		cout << "  " << out[i] << endl;
 }

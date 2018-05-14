@@ -4,9 +4,8 @@
 #include "cmdline.h"
 #include "Complex.h"
 #include "Vector.h"
-#include "DFT.h"
 #include "io.h"
-#include "strategy.h"
+#include "fourier.h"
 
 static void opt_input(std::string const &);
 static void opt_output(std::string const &);
