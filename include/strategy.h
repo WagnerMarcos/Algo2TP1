@@ -37,9 +37,9 @@ public:
 			return false;
 		delete _pb;
 		if(method == DFT_method)
-			_pb = new DFT( input , output );
+			_pb = new DFT;
 		if(method == IDFT_method)
-			_pb = new IDFT( input , output );
+			_pb = new IDFT;
 		return true;
 	}
 
@@ -53,7 +53,7 @@ public:
 class IProcessBehavior{
 
 	IProcessBehavior() = 0;
-	coefficient() = 0 ;
+	coefficient(ComplexVector const & input, ComplexVector & output) = 0 ;
 
 public:
 	~IProcessBehavior( _pb )
