@@ -92,7 +92,7 @@ namespace {
 		RandomVectors() : OrigVector(vectorSize),
 		                  FTVector(vectorSize),
 		                  FinalVector(vectorSize)
-		{
+		{/*
 			cerr << "Esta prueba crea un vector de "
 			     << vectorSize
 			     << " números complejos pseudo-aleatorios "
@@ -107,6 +107,7 @@ namespace {
 			     << "Por último, comprueba que el vector y la antitransformada de "
 			     << "su transformada sean iguales."
 			     << endl;
+		*/
 			srand(time(NULL));
 			for (size_t i = 0; i < vectorSize; ++i) {
 				long double randA = rand() * rand() * 10000;
@@ -124,7 +125,7 @@ namespace {
 
 	class VectorsFromFiles : public ::testing::Test {
 	protected:
-		VectorsFromFiles() : i(0) {
+		VectorsFromFiles() : i(0) { /*
 			cerr << "Esta prueba lee vectores y sus transformadas de archivos de prueba "
 			     << "y luego las compara a los valores obtenidos al aplicarle "
 				  << "la función DFT() e IDFT() usadas en el código del TP."
@@ -132,7 +133,7 @@ namespace {
 				  << "Se considera que dos números son iguales si su diferencia es menor o igual a "
 			     << Complex_acceptableDelta
 				  << endl;
-		}
+		*/}
 		void read_vectors_from_files() {
 			ifs.open(test_files[i], ios::in);
 			if (!load_signal(ifs, *originalVector))
@@ -182,9 +183,11 @@ namespace {
 			delete FTOutput;
 			delete originalVector;
 			delete IFTOutput;
+			/*
 			cerr << test_files[i]
 			     << " fue procesado."
 			     << endl;
+			*/
 		}
 	}
 
