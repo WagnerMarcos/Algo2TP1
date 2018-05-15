@@ -1,0 +1,15 @@
+[==========] Running 2 tests from 2 test cases.
+[----------] Global test environment set-up.
+[----------] 1 test from RandomVectors
+[ RUN      ] RandomVectors.DFTandIDFT
+[       OK ] RandomVectors.DFTandIDFT (147177 ms)
+[----------] 1 test from RandomVectors (147177 ms total)
+
+[----------] 1 test from VectorsFromFiles
+[ RUN      ] VectorsFromFiles.DFTandIDFT
+[       OK ] VectorsFromFiles.DFTandIDFT (16113 ms)
+[----------] 1 test from VectorsFromFiles (16113 ms total)
+
+[----------] Global test environment tear-down
+[==========] 2 tests from 2 test cases ran. (163291 ms total)
+[  PASSED  ] 2 tests.

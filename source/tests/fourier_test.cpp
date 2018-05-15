@@ -18,6 +18,8 @@ using namespace std;
 static char *program_name;
 static size_t vectorSize;
 static const size_t file_amount = 28;
+static FourierTransform* ft;
+static FourierTransform* ift;
 static const string test_files[file_amount] = {
 	"testfiles/Frecuencia1.txt",
 	"testfiles/TFrecuencia1.txt",
@@ -81,13 +83,14 @@ opt_help(std::string const &arg)
 				 << std::endl;
 	exit(0);
 }
+
 // Google Test exige que las pruebas estén en un namespace sin nombre
 //
 namespace {
 	class RandomVectors : public ::testing::Test {
 	protected:
 		RandomVectors() : OrigVector(vectorSize),
-		                  DFTVector(vectorSize),
+		                  FTVector(vectorSize),
 		                  FinalVector(vectorSize)
 		{
 			cerr << "Esta prueba crea un vector de "
@@ -115,7 +118,7 @@ namespace {
 			cerr << endl;  // por razones de formato de la impresión
 		}
 		ComplexVector OrigVector;
-		ComplexVector DFTVector;
+		ComplexVector FTVector;
 		ComplexVector FinalVector;
 	};
 
@@ -149,13 +152,13 @@ namespace {
 		ifstream ifs;
 		ComplexVector *originalVector;
 		ComplexVector *transformedVector;
-		ComplexVector *DFTOutput;
-		ComplexVector *IDFTOutput;
+		ComplexVector *FTOutput;
+		ComplexVector *IFTOutput;
 	};
 
 	TEST_F(RandomVectors, DFTandIDFT) {
-		transform(OrigVector, DFTVector, TransformType::DFT);
-		transform(DFTVector, FinalVector, TransformType::IDFT);
+		ft->compute(OrigVector, FTVector);
+		ift->compute(FTVector, FinalVector);
 		for (size_t i = 0; i < vectorSize; ++i)
 			EXPECT_EQ(OrigVector[i], FinalVector[i]);
 	}
@@ -164,21 +167,21 @@ namespace {
 		while (i < file_amount) {
 			originalVector = new ComplexVector;
 			transformedVector = new ComplexVector;
-			DFTOutput = new  ComplexVector;
-			IDFTOutput = new ComplexVector;
+			FTOutput = new  ComplexVector;
+			IFTOutput = new ComplexVector;
 			read_vectors_from_files();	
-			if (!transform(*originalVector, *DFTOutput, TransformType::DFT))
+			if (!ft->compute(*originalVector, *FTOutput))
 				exit(1);
 			for (size_t j = 0 ; j < originalVector->size(); ++j)
-				EXPECT_EQ((*transformedVector)[j], (*DFTOutput)[j]);
-			if (!transform(*transformedVector, *IDFTOutput, TransformType::IDFT))
+				EXPECT_EQ((*transformedVector)[j], (*FTOutput)[j]);
+			if (!ift->compute(*transformedVector, *IFTOutput))
 				exit(1);
 			for (size_t j = 0 ; j < originalVector->size(); ++j)
-				EXPECT_EQ((*originalVector)[j], (*IDFTOutput)[j]);
+				EXPECT_EQ((*originalVector)[j], (*IFTOutput)[j]);
 			delete transformedVector; 
-			delete DFTOutput;
+			delete FTOutput;
 			delete originalVector;
-			delete IDFTOutput;
+			delete IFTOutput;
 			cerr << test_files[i]
 			     << " fue procesado."
 			     << endl;
@@ -192,6 +195,26 @@ int main(int argc, char **argv) {
 	cmdline cmdl(options);
 	cmdl.parse(argc, argv);
 
+	DFT dft;
+	IDFT idft;
+	FFT fft;
+	IFFT ifft;
+
 	::testing::InitGoogleTest(&argc, argv);
-	return RUN_ALL_TESTS();
+
+	cerr << "Pruebas para la DFT e IDFT: " << endl;
+	ft = new FourierTransform(&dft);
+	ift = new FourierTransform(&idft);
+	RUN_ALL_TESTS();
+	delete ft;
+	delete ift;
+/*
+	cerr << "Pruebas para la FFT e IFFT: " << endl;
+	ft = new FourierTransform(&fft);
+	ift = new FourierTransform(&ifft);
+	RUN_ALL_TESTS()
+	delete ft;
+	delete ift;
+*/
+	return 0;
 }
