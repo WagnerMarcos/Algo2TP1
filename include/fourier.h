@@ -46,17 +46,26 @@ private:
 
 class Fast : public FourierAlgorithm {
 public:
-	virtual bool compute(ComplexVector const & input, ComplexVector & output) = 0;
+	bool compute(ComplexVector const & input, ComplexVector & output);
+	bool _compute(Complex <> *, Complex <> *, int n);
+protected:
+	virtual const Complex <> FFTcoefficient(int const k, int const n)=0;
 };
 
 class FFT : public Fast {
 public:
-	bool compute(ComplexVector const & input, ComplexVector & output);
+	inline const Complex <> FFTcoefficient(int const k, int const n) override {
+		Complex<> W( cos(2*M_PI*k / n) , sin(2*M_PI*k / n) );
+		return W;
+	}
 };
 
 class IFFT : public Fast {
 public:
-	bool compute(ComplexVector const & input, ComplexVector & output);
+	inline const Complex <> FFTcoefficient(int const k, int const n) override {
+		Complex <> W( cos(-2*M_PI*k / n) , sin(-2*M_PI*k / n) );
+		return W;
+	}
 };
 
 #endif	// _FOURIER_H_INCLUDED_
