@@ -12,9 +12,6 @@ using ComplexVector = Vector <Complex <long double> >;
 
 using namespace std;
 
-#define PRINT(X) \
-	std::cerr << #X << ": " << X << std::endl
-
 static char *program_name;
 static size_t vectorSize;
 static const size_t file_amount = 28;
@@ -116,7 +113,7 @@ namespace {
 			}
 		}
 		~RandomVectors() {
-			cerr << endl;  // por razones de formato de la impresión
+		//	cerr << endl;  // por razones de formato de la impresión
 		}
 		ComplexVector OrigVector;
 		ComplexVector FTVector;
@@ -147,7 +144,7 @@ namespace {
 			++i;
 		}
 		~VectorsFromFiles() {
-			cerr << endl;  // por razones de formato
+		//	cerr << endl;  // por razones de formato
 		}
 		size_t i;
 		ifstream ifs;
@@ -157,14 +154,14 @@ namespace {
 		ComplexVector *IFTOutput;
 	};
 
-	TEST_F(RandomVectors, DFTandIDFT) {
+	TEST_F(RandomVectors, FTandIFT) {
 		ft->compute(OrigVector, FTVector);
 		ift->compute(FTVector, FinalVector);
 		for (size_t i = 0; i < vectorSize; ++i)
 			EXPECT_EQ(OrigVector[i], FinalVector[i]);
 	}
 
-	TEST_F(VectorsFromFiles, DFTandIDFT) {
+	TEST_F(VectorsFromFiles, FTandIFT) {
 		while (i < file_amount) {
 			originalVector = new ComplexVector;
 			transformedVector = new ComplexVector;
@@ -215,7 +212,7 @@ int main(int argc, char **argv) {
 	cerr << "Pruebas para la FFT e IFFT: " << endl;
 	ft = new FourierTransform(&fft);
 	ift = new FourierTransform(&ifft);
-	RUN_ALL_TESTS()
+	RUN_ALL_TESTS();
 	delete ft;
 	delete ift;
 */

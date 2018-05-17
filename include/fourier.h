@@ -16,7 +16,7 @@ class FourierTransform {
 public:
 	FourierTransform(FourierAlgorithm *method) : _method(method) {}
 	virtual ~FourierTransform() {}
-	inline bool compute(ComplexVector const & input, ComplexVector & output) {
+	bool compute(ComplexVector const & input, ComplexVector & output) {
 		return _method? _method->compute(input, output) : false;
 	}
 private:
@@ -27,19 +27,17 @@ class Discrete : public FourierAlgorithm {
 public:
 	bool compute(ComplexVector const & input, ComplexVector & output);
 protected:
-	virtual const Complex<> coefficient(int const i, int const j, int const n) = 0;
+	virtual const Complex<> _coefficient(int const i, int const j, int const n) = 0;
 };
 
 class DFT : public Discrete {
-private:
-	inline const Complex <> coefficient(int const i, int const j, int const n) override {
+	const Complex <> _coefficient(int const i, int const j, int const n) override {
 		return exp(I * -2.0 * M_PI * i * j / n);
 	}
 };
 
 class IDFT : public Discrete {
-private:
-	inline const Complex <> coefficient(int const i, int const j, int const n) override {
+	const Complex <> _coefficient(int const i, int const j, int const n) override {
 		return exp(I * 2.0 * M_PI * i * j / n) / n;
 	}
 };
@@ -47,24 +45,21 @@ private:
 class Fast : public FourierAlgorithm {
 public:
 	bool compute(ComplexVector const & input, ComplexVector & output);
-	bool _compute(Complex <> *, Complex <> *, int n);
 protected:
-	virtual const Complex <> FFTcoefficient(int const k, int const n)=0;
+	virtual const Complex <> _coefficient(int const k, int const n) = 0;
+private:
+	ComplexVector _compute(ComplexVector const & input);
 };
 
 class FFT : public Fast {
-public:
-	inline const Complex <> FFTcoefficient(int const k, int const n) override {
-		Complex<> W( cos(2*M_PI*k / n) , sin(2*M_PI*k / n) );
-		return W;
+	const Complex <> _coefficient(int const k, int const n) override {
+		return exp(I * 2.0 * M_PI * k / n);
 	}
 };
 
 class IFFT : public Fast {
-public:
-	inline const Complex <> FFTcoefficient(int const k, int const n) override {
-		Complex <> W( cos(-2*M_PI*k / n) , sin(-2*M_PI*k / n) );
-		return W;
+	const Complex <> _coefficient(int const k, int const n) override {
+		return exp(I * -2.0 * M_PI * k / n) / n;
 	}
 };
 
