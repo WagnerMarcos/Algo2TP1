@@ -154,13 +154,13 @@ int main(int argc, char **argv) {
 			          << "(la cantidad de elementos puede ser cambiada llamando "
 			          << program_name
 			          << " -n <cantidad>): uno de ellos usando la "
-			          << "clase std::complex y el otro usando la clase Complex"  
-			          << "  diseñada para el TP."
+			          << "clase std::complex y el otro usando la clase Complex "  
+			          << "diseñada para el TP."
 			          << std::endl
 			          << "El programa aplica las diversas funciones asociadas "
 			          << "a la clase a cada número y compara lo obtenido "
 			          << "con lo obtenido del llamado de las funciones análogas"
-			          <<  "asociadas a la clase std::complex."
+			          << " asociadas a la clase std::complex."
 				       << std::endl;
 
 	::testing::InitGoogleTest(&argc, argv);

@@ -83,26 +83,27 @@ opt_method(std::string const & arg)
 		chosen_method = new FFT;
 		chosen_inverse_method = new IFFT;
 	}
-	if (arg == "discrete") {
+	else if (arg == "discrete") {
 		chosen_method = new DFT;
 		chosen_inverse_method = new IDFT;
 	}
 	else {
 		std::cerr << "Not a possible method: "
 		          << arg
-		          << ". Available options: \"fast\" and \"discrete\"."
+		          << "."
 		          << std::endl;
+		opt_help();
 		exit(1);
 	}
-
 }
 
 static void
 opt_help(std::string const & arg)
 {
-	std::cerr << program_name
-	          << " [-n <amount>]"
-	          << " [-m <fast|discrete>]"
+	std::cout << "Usage: "
+	          << program_name
+	          << " [-n amount]"
+	          << " [-m fast | discrete]"
 	          << std::endl;
 	exit(0);
 }
@@ -115,22 +116,7 @@ namespace {
 		RandomVectors() : OrigVector(vectorSize),
 		                  FTVector(vectorSize),
 		                  FinalVector(vectorSize)
-		{/*
-			cerr << "Esta prueba crea un vector de "
-			     << vectorSize
-			     << " números complejos pseudo-aleatorios "
-			     << "(la cantidad de elementos puede ser cambiada llamando "
-			     << program_name
-			     << " -n <cantidad>). "
-			     << endl
-			     << "Luego le aplica la DFT, y al vector "
-			     << "resultante le aplica la IDFT, "
-			     << "mediante las funciones utiizadas en el TP. "
-			     << endl
-			     << "Por último, comprueba que el vector y la antitransformada de "
-			     << "su transformada sean iguales."
-			     << endl;
-		*/
+		{
 			srand(time(NULL));
 			for (size_t i = 0; i < vectorSize; ++i) {
 				long double randA = rand() * rand() * 10000;
@@ -139,7 +125,6 @@ namespace {
 			}
 		}
 		~RandomVectors() {
-		//	cerr << endl;  // por razones de formato de la impresión
 		}
 		ComplexVector OrigVector;
 		ComplexVector FTVector;
@@ -148,15 +133,8 @@ namespace {
 
 	class VectorsFromFiles : public ::testing::Test {
 	protected:
-		VectorsFromFiles() : i(0) { /*
-			cerr << "Esta prueba lee vectores y sus transformadas de archivos de prueba "
-			     << "y luego las compara a los valores obtenidos al aplicarle "
-				  << "la función DFT() e IDFT() usadas en el código del TP."
-				  << endl
-				  << "Se considera que dos números son iguales si su diferencia es menor o igual a "
-			     << Complex_acceptableDelta
-				  << endl;
-		*/}
+		VectorsFromFiles() : i(0) {
+		}
 		void read_vectors_from_files() {
 			ifs.open(test_files[i], ios::in);
 			if (!load_signal(ifs, *originalVector))
@@ -170,7 +148,6 @@ namespace {
 			++i;
 		}
 		~VectorsFromFiles() {
-		//	cerr << endl;  // por razones de formato
 		}
 		size_t i;
 		ifstream ifs;
@@ -206,11 +183,6 @@ namespace {
 			delete FTOutput;
 			delete originalVector;
 			delete IFTOutput;
-			/*
-			cerr << test_files[i]
-			     << " fue procesado."
-			     << endl;
-			*/
 		}
 	}
 
@@ -221,15 +193,45 @@ int main(int argc, char **argv) {
 	cmdline cmdl(options);
 	cmdl.parse(argc, argv);
 
+	int test_result;
+
 	::testing::InitGoogleTest(&argc, argv);
 
-	cout << "Pruebas para el método elegido: " << endl;
+	cout << "En la primera prueba se crea un vector de "
+	     << vectorSize
+	     << " números complejos pseudo-aleatorios "
+	     << "(la cantidad de elementos puede ser cambiada llamando "
+	     << program_name
+	     << " -n <cantidad>). "
+	     << endl
+	     << "Luego se le aplica la transformada elegida"
+	     << "(por defecto se usan la FFT e IFFT; "
+	     << "la transformada a utilizar puede  ser cambiada llamando "
+	     << program_name
+	     << "-m <fast|discrete>), y al vector resultante se le aplica "
+	     << "la antitransformada."
+	     << endl
+	     << "Por último, se comprueba que el vector original y la antitransformada de "
+	     << "su transformada sean iguales."
+	     << endl;
+
+	cout << "En la segunda prueba se lee vectores y sus transformadas de archivos "
+	     << "y luego se los compara a los valores obtenidos al aplicarles "
+	     << "la transformada elegida."
+	     << endl
+	     << "Se considera que dos números son iguales si su diferencia es menor o igual a "
+	     << Complex_acceptableDelta
+	     << "."
+	     << endl;
+	
 	ft = new FourierTransform(chosen_method);
 	ift = new FourierTransform(chosen_inverse_method);
-	RUN_ALL_TESTS();
+	
+	test_result = RUN_ALL_TESTS();
+	
 	delete ft;
 	delete ift;
 	delete chosen_method;
 	delete chosen_inverse_method;
-	return 0;
+	return test_result;
 }

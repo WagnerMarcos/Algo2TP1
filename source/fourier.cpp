@@ -3,10 +3,6 @@
 
 #include "fourier.h"
 
-
-#define PRINT(X) \
-	std::cerr << #X << ": " << X << std::endl
-
 bool
 Discrete::compute(ComplexVector const & input, ComplexVector & output)
 {
@@ -27,9 +23,22 @@ bool
 Fast::compute(ComplexVector const & input, ComplexVector & output)
 {
 	output.clear();
-	output = _compute(input);
+	size_t n = input.size();
+
+	if (n & (n - 1)) { // si el tamaño no es una potencia de dos...
+		ComplexVector auxInput(input);
+		while (n & (n - 1)) {
+			auxInput.push_back(0); // ...rellenar con ceros hasta que lo sea.
+			++n;
+		}
+		output = _compute(auxInput);
+	}
+	else
+		output = _compute(input);
+
 	for (size_t i = 0; i < output.size(); ++i)
 		output[i] /= _divisor(output.size());
+
 	return true;
 }
 
