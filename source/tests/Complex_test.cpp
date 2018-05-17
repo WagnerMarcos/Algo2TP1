@@ -160,7 +160,7 @@ int main(int argc, char **argv) {
 			          << "El programa aplica las diversas funciones asociadas "
 			          << "a la clase a cada número y compara lo obtenido "
 			          << "con lo obtenido del llamado de las funciones análogas"
-			          <<  "asociadas a la clase std::complex."
+			          << " asociadas a la clase std::complex."
 				       << std::endl;
 
 	::testing::InitGoogleTest(&argc, argv);
