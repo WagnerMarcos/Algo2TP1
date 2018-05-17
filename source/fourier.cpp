@@ -28,6 +28,8 @@ Fast::compute(ComplexVector const & input, ComplexVector & output)
 {
 	output.clear();
 	output = _compute(input);
+	for (size_t i = 0; i < output.size(); ++i)
+		output[i] /= _divisor(output.size());
 	return true;
 }
 

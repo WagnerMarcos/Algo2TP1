@@ -201,20 +201,20 @@ int main(int argc, char **argv) {
 	IFFT ifft;
 
 	::testing::InitGoogleTest(&argc, argv);
-
+/*
 	cerr << "Pruebas para la DFT e IDFT: " << endl;
 	ft = new FourierTransform(&dft);
 	ift = new FourierTransform(&idft);
 	RUN_ALL_TESTS();
 	delete ft;
 	delete ift;
-/*
+*/
 	cerr << "Pruebas para la FFT e IFFT: " << endl;
 	ft = new FourierTransform(&fft);
 	ift = new FourierTransform(&ifft);
 	RUN_ALL_TESTS();
 	delete ft;
 	delete ift;
-*/
+
 	return 0;
 }
