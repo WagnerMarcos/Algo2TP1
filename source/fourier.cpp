@@ -3,10 +3,6 @@
 
 #include "fourier.h"
 
-
-#define PRINT(X) \
-	std::cerr << #X << ": " << X << std::endl
-
 bool
 Discrete::compute(ComplexVector const & input, ComplexVector & output)
 {
