@@ -26,6 +26,7 @@ public:
 	}
 	~Vector() {
 		delete[] data;
+		data = NULL;
 	}
 	Vector& operator=(const Vector& v) {
 		// Check for self-assignment:

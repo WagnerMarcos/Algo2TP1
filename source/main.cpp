@@ -68,15 +68,7 @@ opt_method(string const &arg)
 	istringstream iss(arg);
 	string read_method;
 
-	if (!(iss >> read_method)
-	    || !iss.eof()) {
-		cerr << "Not a posible method: "
-		     << arg
-		     << "."
-		     << endl;
-		exit(1);
-	}
-	if (iss.bad()) {
+	if (!(iss >> read_method) || iss.bad()) {
 		cerr << "Cannot read method."
 		     << endl;
 		exit(1);
@@ -90,17 +82,22 @@ opt_method(string const &arg)
 	else if (read_method == "IDFT")
 		chosen_method = new IDFT;
 	else {
-		cerr << "Cannot read method."
-	          << endl;
+		cerr << "Not a posible method: "
+		     << arg
+		     << "."
+		     << endl;
+		opt_help();
 	   exit(1);
 	}
 	::transform = new FourierTransform(chosen_method);
 }
 
 static void
-opt_help(string const &arg)
+opt_help(string const & arg)
 {
-	cout << program_name << " [-m DFT | IDFT] [-i file] [-o file]"
+	cout << "Usage: "
+	     << program_name
+	     << " [-m FFT | IFFT | DFT | IDFT] [-i file] [-o file]"
 	     << endl;
 	exit(0);
 }
@@ -154,4 +151,6 @@ main(int argc, char * const argv[])
 	}
 	delete chosen_method;
 	delete ::transform;
+	chosen_method = nullptr;
+	::transform = nullptr;
 }
