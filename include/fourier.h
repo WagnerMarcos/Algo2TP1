@@ -53,13 +53,13 @@ private:
 
 class FFT : public Fast {
 	const Complex <> _coefficient(int const k, int const n) override {
-		return exp(I * 2.0 * M_PI * k / n);
+		return exp(I * -2.0 * M_PI * k / n);
 	}
 };
 
 class IFFT : public Fast {
 	const Complex <> _coefficient(int const k, int const n) override {
-		return exp(I * -2.0 * M_PI * k / n) / n;
+		return exp(I * 2.0 * M_PI * k / n) / n;
 	}
 };
 

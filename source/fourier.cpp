@@ -35,7 +35,7 @@ ComplexVector
 Fast::_compute(ComplexVector const & input)
 {
 	size_t n = input.size();
-	if(n <= 1) {
+	if (n <= 1) {
 		return ComplexVector(input);
 	}
 
@@ -50,13 +50,10 @@ Fast::_compute(ComplexVector const & input)
 	ComplexVector outputEven(_compute(inputEven));
 	ComplexVector outputOdd(_compute(inputOdd));
 
-	Complex<> w = 1;
-	Complex<> w_n = _coefficient(1, n);
 	ComplexVector output(n);
-	for(size_t k = 0; k < n / 2; ++k){
-		output[k] = outputEven[k] + w * outputOdd[k];
-		output[k + n/2] = outputEven[k] - w * outputOdd[k];
-		w *= w_n;
+	for (size_t k = 0; k < n / 2; ++k){
+		output[k] = outputEven[k] + _coefficient(k, n) * outputOdd[k];
+		output[k + n/2] = outputEven[k] - _coefficient(k, n) * outputOdd[k];
 	}
 
 	return output;
