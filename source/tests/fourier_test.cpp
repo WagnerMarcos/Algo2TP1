@@ -17,6 +17,8 @@ static size_t vectorSize;
 static const size_t file_amount = 28;
 static FourierTransform* ft;
 static FourierTransform* ift;
+static FourierAlgorithm* chosen_method;
+static FourierAlgorithm* chosen_inverse_method;
 static const string test_files[file_amount] = {
 	"testfiles/Frecuencia1.txt",
 	"testfiles/TFrecuencia1.txt",
@@ -50,12 +52,13 @@ static const string test_files[file_amount] = {
 
 static option_t options[] = {
 	{1, "n", "number", DEFAULT_AMOUNT, opt_number, OPT_DEFAULT},
+	{1, "m", "method", DEFAULT_METHOD, opt_method, OPT_DEFAULT},
 	{0, "h", "help", NULL, opt_help, OPT_DEFAULT},
 	{0, },
 };
 
 static void
-opt_number(std::string const &arg)
+opt_number(std::string const & arg)
 {
 	std::istringstream iss(arg);
 
@@ -68,16 +71,39 @@ opt_number(std::string const &arg)
 	}
 	if (iss.bad()) {
 		std::cerr << "Cannot read amount."
-		     << std::endl;
+		          << std::endl;
 		exit(1);
 	}
 }
 
 static void
-opt_help(std::string const &arg)
+opt_method(std::string const & arg)
 {
-	std::cerr << program_name << " [-n amount]"
-				 << std::endl;
+	if (arg == "fast") {
+		chosen_method = new FFT;
+		chosen_inverse_method = new IFFT;
+	}
+	if (arg == "discrete") {
+		chosen_method = new DFT;
+		chosen_inverse_method = new IDFT;
+	}
+	else {
+		std::cerr << "Not a possible method: "
+		          << arg
+		          << ". Available options: \"fast\" and \"discrete\"."
+		          << std::endl;
+		exit(1);
+	}
+
+}
+
+static void
+opt_help(std::string const & arg)
+{
+	std::cerr << program_name
+	          << " [-n <amount>]"
+	          << " [-m <fast|discrete>]"
+	          << std::endl;
 	exit(0);
 }
 
@@ -195,26 +221,15 @@ int main(int argc, char **argv) {
 	cmdline cmdl(options);
 	cmdl.parse(argc, argv);
 
-	DFT dft;
-	IDFT idft;
-	FFT fft;
-	IFFT ifft;
-
 	::testing::InitGoogleTest(&argc, argv);
-/*
-	cerr << "Pruebas para la DFT e IDFT: " << endl;
-	ft = new FourierTransform(&dft);
-	ift = new FourierTransform(&idft);
-	RUN_ALL_TESTS();
-	delete ft;
-	delete ift;
-*/
-	cerr << "Pruebas para la FFT e IFFT: " << endl;
-	ft = new FourierTransform(&fft);
-	ift = new FourierTransform(&ifft);
-	RUN_ALL_TESTS();
-	delete ft;
-	delete ift;
 
+	cout << "Pruebas para el método elegido: " << endl;
+	ft = new FourierTransform(chosen_method);
+	ift = new FourierTransform(chosen_inverse_method);
+	RUN_ALL_TESTS();
+	delete ft;
+	delete ift;
+	delete chosen_method;
+	delete chosen_inverse_method;
 	return 0;
 }
