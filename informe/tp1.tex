@@ -154,13 +154,13 @@
 		\vspace*{1cm}
 	
 			\begin{huge}
-				Trabajo Práctico n.° 0:\\
+				Trabajo Práctico n.° 1:\\
 			\end{huge}
 		
 		\vspace*{0.75cm}
 	
 			\begin{Huge}
-				\textbf{Programación C++} \\
+				\textbf{Objetos y algoritmos} \\
 			\end{Huge}
 		
 		\vspace*{1.75cm}
@@ -194,7 +194,7 @@
 	
 			\begin{large}
 				Curso 1 \\
-				Jueves 10 de Mayo de 2018 \\
+				Jueves 17 de Mayo de 2018 \\
 			\end{large}
 		
 	\end{center}
@@ -203,9 +203,9 @@
 
 	\section{Introducción}	
 		
-		\indent En este trabajo se busca obtener conocimientos de programación en el lenguaje C++. Para ello se
-		realiza un programa en dicho lenguaje implementando la transformada discreta de Fourier (DFT) y su transformada
-		inversa (IDFT).
+		\indent En este trabajo se busca obtener conocimientos de programación orientada a objetos y de diseño de algoritmos. Para ello se
+		realiza un programa utilizando el patrón de diseño Strategy y se mejora el diseño original previo de la transformada discreta de Fourier
+		implementando la transformación rápida de Fourier (FFT) y su transformada inversa (IFFT).
 		
 	\section{Diseño e implementación del programa}	
 	
@@ -221,16 +221,32 @@
             orden leído cada uno de los objetos de la clase Complex. 
    			\\
 			\indent Para la clase Complex se sobrecargaron los operadores correspondientes a la suma, resta, multiplicación, 
-			división, los cuales son utilizados en la implementación de la DFT y la IDFT. Además se sobrecargaron los operadores
+			división, los cuales son utilizados en la implementación de todas las transformadas. Además se sobrecargaron los operadores
 			de asignación, negación y comparación. De esta forma se logra un código más mantenible y legible. Por otro lado para 
 			la clase vector se sobrecargaron los operadores de asignación e indexación. 
-            \\
-            \indent Se definió un tipo de dato enumerativo para indicar al programa si debe realizar la DFT o la IDFT variando en
-			la función de la transformada el coeficiente en el exponente, y en el caso de la IDFT multiplicando por la inversa
-			de N. Con esto se evita repetir el código en cada transformada.
 			\\
-			\indent Por último, además de las dos clases creadas, se utilizó el código provisto para el manejo de argumentos,
-			realizando los cambios necesarios para que parsee el archivo de señales, de forma que lea una señal por línea.
+			\indent Por último, se utilizó el código provisto para el manejo de argumentos,	realizando los cambios necesarios para que 
+			parsee el archivo de señales, de forma que lea una señal por línea.
+
+		\subsection{Patrón de diseño}
+			
+			\begin{figure}[H]
+				\centering
+					\includegraphics[scale=0.55]{diagrama_de_clases.jpg}
+				\caption{Diagrama de clases según el lenguaje unificado de modelado UML}
+			\end{figure}
+			
+
+			\indent Se utilizó para este proyecto el patrón de diseño Strategy. Esto permite reutilizar código y proporciona
+			al usuario una misma interfaz que asegura un correcto funcionamiento sin importar la transformada utilizada. Según
+			el método elegido el constructor de FourierTransform recibirá un puntero a una subclase de FourierAlgorithm. Esta subclase de FourierAlgorithm ejecutará la función \textit{\_compute()} con el coeficiente correspondiente.
+
+		\subsection{Diseño del algoritmo de la transformada rápida de Fourier}
+			\indent La transformada rápida de Fourier se realizó de manera recursiva con el método dividir y conquistar, aprovechando 
+			la propiedad de las raíces complejas de la unidad y su periodicidad, que permite computar la DFT en tiempo \textit{O(nlg(n))},
+			en lugar de \textit{O(n²)}. El requisito para esto es que el número de entradas sea una potencia de 2. Al realizar dividir
+			y conquistar se divide en cada pasada recursiva a los elementos en posiciones par y a los posicionados en numeros impares, 
+			y se los procesa por separado, logrando reducir la cantidad de operaciones totales.   
 
 
 		\subsection{Interfaz}
@@ -240,7 +256,7 @@
 			respectivamente) seguido del nombre del archivo. En caso de no indicar ningún archivo, el programa utiliza los 
 			flujos standar de entrada (por teclado) y salida (por pantalla). Por otro lado, también es posible indicar el método 
 			de transformación que se desea utilizar a partir del flag de método \textit{-m} e indicando luego el método por su
-			abreviatura (DFT o IDFT). En caso de que esta opción no sea indicada, el programa realiza la DFT por defecto.
+			abreviatura (DFT, IDFT, FFT o IFFT). En caso de que esta opción no sea indicada, el programa realiza la FFT por defecto.
 
 		\subsection{Formato de entrada y salida}
 
@@ -251,6 +267,13 @@
 
 	\section{Corridas de prueba}
 	 
+		\indent Las pruebas realizadas son similares a las realizadas en el proyecto anterior. Solo se agregaron las pruebas 
+		correspondientes al procesamiento de datos con FFT e IFFT. Estas pruebas permitieron determinar que el tiempo de 
+		procesamiento de la transformada rápida de Fourier es mil veces mas rápida que la transformada discreta de Fourier. 
+		\\
+		\indent En las pruebas realizadas con un número de entradas diferente a una potencia de dos el resultado varía al 
+		desarrollado por la DFT al rellenar con ceros los complejos faltantes.
+		\\	
 		\indent Para realizar las pruebas de funcionamiento decidimos usar Google C++ Testing Framework, una herramienta que 
 		permite que las pruebas sean independientes y repetibles. Permite separar las pruebas en módulos separados, reflejando 
 		la estructura del código evaluado y logrando de esta manera que sea mas entendible y mantenible. Al fallar una prueba, 
@@ -265,12 +288,6 @@
 		función \textit{IDFT()} y luego la robustez del proceso, realizando pruebas que variaban en el volumen de datos 
 		pseudo-aleatorios obtenidos con \textit{rand()}.
 		\\
-		\indent Probando la clase Complex de esta manera, se descubrió que la forma en que se estaba implementando la función
-		\textit{exp()},	que calcula la exponencial compleja, difería de los valores obtenidos con \textit{std::exp()} en algunos 
-		casos: en general, dentro de los 10 000 000 de números que se probaba, fallaba en alrededor de 20. Esto se debía a que
-		la función de comparación implementada con el fin de que las comparaciones tengan en cuenta una cierta tolerancia debida
-		a los errores propios de la aritmética de punto flotante no manejaban adecuadamente el valor inf.
-		\\
 		\indent Asimismo, se realizaron pruebas para determinar cuál debía ser el valor máximo en que pueden diferir dos números
 		para ser considerados iguales. Para esto se fueron ejecutando las pruebas creadas para números complejos y para la DFT variando,
 		de a potencias de diez, el factor por el que se multiplicaba a \textit{std::numeric\_limits<long double>::epsilon()}, el cual es
@@ -283,34 +300,36 @@
 
 	\section{Problemas durante el desarrollo y soluciones}
 		
-        \indent A partir de las pruebas realizadas, se detectaron mínimas fallas en la función exponencial de la clase Complex (2 en
-        un millón de números) al cargar el vector con una extrema cantidad de complejos. Al corregir dicho error, el tiempo de 
-        ejecución de las funciones afectadas se duplicó. A pesar de que la falla podría considerarse despreciable, se corrigió procurando
-        una mayor robustez y resignando eficiencia.   
+        \indent Al realizar el algoritmo de un proceso tan complejo como la transformada rápida de Fourier se desarrollaron varios
+        problemas y contratiempos hasta que se pudo lograr una versión del algoritmo funcional. Estos errores fueron causados por el
+        uso de la recursividad en un algoritmo del cual desconocíamos su funcionamiento. Los valores en el exponente en \textit{coefficient()} 
+        y el desarrollo de la función inversa fue lo que más confusión causó.
+        \\
+        \indent Por otro lado, utilizando Valgrind se verificó que no hubiera fuga de memoria. Inicialmente había un uso incorrecto de
+        memoria dinámica lo cual provocó que el programa pise memoria que no le correspondia. Gracias a este diagnóstico se pudo diseñar 
+        el programa de forma correcta.
 
-	\section{Posibles mejoras}
-
-		\indent El aspecto principal a mejorar es la eficiencia del algoritmo diseñado para calcular la transformada discreta de Fourier
-		y su inversa, dado que este se implementó de la forma más simple posible, utilizando una iteración muy ineficiente. Se consideraron 
-		distintas alternativas para mejorarlo, como utilizar una matriz que contenga las exponenciales complejas utilizadas en la transformación
-		y de esta forma evitar realizar dichas operaciones de forma repetida. Además, investigando y estudiando dicha matriz algebraicamente, se
-		encontró que esta resulta una matriz hermética, lo cual simplificaría su construcción disminuyendo más aún la cantidad de operaciones
-		necesarias para la transformación.
-		\\
-		\indent	Por otro lado, la DFT se podría realizar de manera más eficiente utilizando el algoritmo de la FFT, Fast Fourier Transform. Este 
-		algoritmo fue extensamente estudiado y perfeccionado, y es comunmente utilizado para realizar esta transformada.  
+   
 
 	\section{Conclusiones}
 	
-		\indent	EL programa cumple su función de manera eficaz, aunque se podría realizar ciertas mejoras para que sea más eficiente. Utilizar
-		herramientas como Google C++ Testing Framework facilita la tarea de probar el funcionamiento y permite de manera sencilla verificar el
-		funcionamiento a medida que diferentes cambios son realizados al código.
+		\indent	El programa cumple su función de manera eficaz cualquiera sea el método de la transformada que se utilice. La eficiencia
+		del mismo depende del método utilizado, siendo la FFT mil veces más eficiente que la DFT en cuanto al tiempo de ejecución. Sin
+		embargo, es posible mejorar ligeramente	la eficiencia del algoritmo utilizando propiedades de los numeros complejos para reducir
+		parcialmente la cantidad de operaciones que se	realizan aunque la complejidad final seguiría siendo \textit{O(nlg(n))}. Por otro 
+		lado utilizando algoritmos más complejos, sería posible	trabajar con una cantidad de muestras de señales que no sean
+		necesariamente potencia de dos, y de esta manera evitar aproximar los resultados de nuestra transformada al completar la muestra 
+		con ceros al final del vector hasta llegar a la potencia entera de 2 más cercana.
+		\\
+		\indent Por otro lado, utilizar herramientas como Google C++ Testing Framework facilita la tarea de probar el funcionamiento y permite
+		de manera sencilla verificar el	funcionamiento a medida que diferentes cambios son realizados al código.
 
 	\section{Bibliografía}
 		
 		\begin{itemize}
 		\item Ghezzi, Carlo \& Jazayeri, Mehdi \& Mandrioli, Dino (1991). \textit{Fundamentals of Software Engineering} ($1.^{era}$ ed.) Upper Saddle River, NJ 07458: Prentice Hall, Inc.
 		\item Stroustrup, Bjarne  (1988). \textit{The C++ Programming Language}  ($4.^{ta}$ ed.) Upper Saddle River, NJ 07458: Addison-Wesley.
+		\item Cormen, Thomas \& Leiserson, Charles \& Rivest, Ronald \& Stein, Clifford (1989). \textit{Introduction to Algorithms} ($1.^{era}$ ed.) Upper Saddle River, NJ 07458: MIT Press.
 		\end{itemize}
 
 	\section{Script de compilación}
@@ -338,11 +357,11 @@
 		io.cpp
 		\lstinputlisting[frame=single]{io.cpp}
 
-		DFT.h
-		\lstinputlisting[frame=single]{DFT.h}
+		fourier.h
+		\lstinputlisting[frame=single]{fourier.h}
 		
-		DFT.cpp
-		\lstinputlisting[frame=single]{DFT.cpp}
+		fourier.cpp
+		\lstinputlisting[frame=single]{fourier.cpp}
 						
 		Vector.h
 		\lstinputlisting[frame=single]{Vector.h}
@@ -350,11 +369,11 @@
 		Complex.h
 		\lstinputlisting[frame=single]{Complex.h}
 
-		DFT\_test.h
-		\lstinputlisting[frame=single]{DFT_test.h}
+		fourier\_test.h
+		\lstinputlisting[frame=single]{fourier_test.h}
 
-		DFT\_test.cpp
-		\lstinputlisting[frame=single]{DFT_test.cpp}
+		fourier\_test.cpp
+		\lstinputlisting[frame=single]{fourier_test.cpp}
 
 		Complex\_test.h
 		\lstinputlisting[frame=single]{Complex_test.h}
