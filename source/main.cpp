@@ -16,7 +16,6 @@ static option_t options[] = {
 };
 
 static char *program_name;
-static FourierAlgorithm *chosen_method;
 static FourierTransform *transform;
 static istream *iss = NULL;
 static ostream *oss = NULL;
@@ -62,9 +61,12 @@ opt_output(string const &arg)
 	}
 }
 
+
+
 static void
 opt_method(string const &arg)
 {
+	FourierAlgorithm *chosen_method;
 	istringstream iss(arg);
 	string read_method;
 
@@ -73,23 +75,20 @@ opt_method(string const &arg)
 		     << endl;
 		exit(1);
 	}
-	if (read_method == "FFT")
-		chosen_method = new FFT;
-	else if (read_method == "IFFT")
-		chosen_method = new IFFT;
-	else if (read_method == "DFT")
-		chosen_method = new DFT;
-	else if (read_method == "IDFT")
-		chosen_method = new IDFT;
-	else {
+
+	chosen_method = choose_method( read_method );
+
+	if (chosen_method == nullptr) {
 		cerr << "Not a posible method: "
 		     << arg
 		     << "."
 		     << endl;
 		opt_help();
-	   exit(1);
+		delete chosen_method;
+		exit(1);
 	}
 	::transform = new FourierTransform(chosen_method);
+	delete chosen_method;
 }
 
 static void
@@ -102,14 +101,27 @@ opt_help(string const & arg)
 	exit(0);
 }
 
+FourierAlgorithm *
+choose_method (string read_method)
+{
+	if (read_method == "FFT")
+		return new FFT;
+	if (read_method == "IFFT")
+		return new IFFT;
+	if (read_method == "DFT")
+		return new DFT;
+	if (read_method == "IDFT")
+		return new IDFT;
+	else 
+		return nullptr;
+}
+
 static void
 print_msg_and_exit(string const & msg)
 {
 	cerr << msg
 	     << endl;
-	delete chosen_method;
 	delete ::transform;
-	chosen_method = nullptr;
 	::transform = nullptr;
 	exit(1);
 }
@@ -153,8 +165,6 @@ main(int argc, char * const argv[])
 		inSignal.clear();
 		outSignal.clear();
 	}
-	delete chosen_method;
 	delete ::transform;
-	chosen_method = nullptr;
 	::transform = nullptr;
 }
