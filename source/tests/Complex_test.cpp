@@ -107,8 +107,11 @@ namespace {
 
 	// Probar que operator/() funcione
 	TEST_F(ComplexTest, Division) {
-		for (size_t i = 0, j = vectorSize -1; i < vectorSize && j >= 0; ++i, --j)
-			EXPECT_EQ(stdComplex[i] / stdComplex[j], myComplex[i] / myComplex[j]);
+		for (size_t i = 0, j = vectorSize -1; i < vectorSize && j >= 0; ++i, --j) {
+			if(stdComplex[j] != 0.0l && myComplex[j] != 0.0l) {
+				EXPECT_EQ(stdComplex[i] / stdComplex[j], myComplex[i] / myComplex[j]);
+			}
+		}
 	}
 
 	// Probar que Complex::conj() funcione
@@ -138,7 +141,7 @@ namespace {
 	// Probar que la representación polar es el mismo número
 	TEST_F(ComplexTest, Polar) {
 		for (size_t i = 0; i < vectorSize; ++i)
-			EXPECT_EQ(myComplex[i], Complex<long double>(myComplex[i].norm()) \
+			EXPECT_EQ(myComplex[i], Complex<long double>(myComplex[i].norm())
 			          * exp(I * Complex<long double>(myComplex[i].arg())));
 	}
 }  // namespace
@@ -149,19 +152,19 @@ int main(int argc, char **argv) {
 	cmdl.parse(argc, argv);
 
 	std::cerr << "Esta prueba crea dos vectores de "
-			          << vectorSize
-			          << " números complejos pseudo-aleatorios"
-			          << "(la cantidad de elementos puede ser cambiada llamando "
-			          << program_name
-			          << " -n <cantidad>): uno de ellos usando la "
-			          << "clase std::complex y el otro usando la clase Complex "  
-			          << "diseñada para el TP."
-			          << std::endl
-			          << "El programa aplica las diversas funciones asociadas "
-			          << "a la clase a cada número y compara lo obtenido "
-			          << "con lo obtenido del llamado de las funciones análogas"
-			          << " asociadas a la clase std::complex."
-				       << std::endl;
+	          << vectorSize
+	          << " números complejos pseudo-aleatorios"
+	          << "(la cantidad de elementos puede ser cambiada llamando "
+	          << program_name
+	          << " -n <cantidad>): uno de ellos usando la "
+	          << "clase std::complex y el otro usando la clase Complex "  
+	          << "diseñada para el TP."
+	          << std::endl
+	          << "El programa aplica las diversas funciones asociadas "
+	          << "a la clase a cada número y compara lo obtenido "
+	          << "con lo obtenido del llamado de las funciones análogas"
+	          << " asociadas a la clase std::complex."
+		       << std::endl;
 
 	::testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();

@@ -107,6 +107,10 @@ print_msg_and_exit(string const & msg)
 {
 	cerr << msg
 	     << endl;
+	delete chosen_method;
+	delete ::transform;
+	chosen_method = nullptr;
+	::transform = nullptr;
 	exit(1);
 }
 
