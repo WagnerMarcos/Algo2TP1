@@ -77,8 +77,8 @@ namespace {
 				myComplex.push_back(Complex <long double>(randA, randB));
 			}
 		}
-		Vector <std::complex <long double> > stdComplex;
-		Vector <Complex <long double> > myComplex;
+		std::vector <std::complex <long double> > stdComplex;
+		std::vector <Complex <long double> > myComplex;
 	};
 
 	// Probar que Complex::Complex() funcione correctamente

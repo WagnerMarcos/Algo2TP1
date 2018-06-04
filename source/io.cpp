@@ -21,7 +21,7 @@ bool
 print_signal(ostream & os, Vector<Complex<> > const & output)
 {
 	for (size_t i = 0; i < output.size(); ++i)
-		os << output[i];
+		os << output[i] << ' ';
 	os << endl;
 	if (os.bad())
 		return false;

@@ -13,9 +13,11 @@ class Vector {
 public:
 	Vector() : data(new T[init_size]), allocated(init_size), used(0) {
 	}
-	// Aloja espacio para count elementos y les asigna el valor value
+	Vector(size_t count) : data(new T[count]), allocated(count), used(0) {
+	}
+	// Reserva espacio para count elementos y les asigna el valor value:
 	//
-	Vector(size_t count, T const & value = 0) : data(new T[count]), allocated(count), used(count) {
+	Vector(size_t count, T const & value) : data(new T[count]), allocated(count), used(count) {
 		for (size_t i = 0; i < count; ++i) {
 			data[i] = value;
 		}
@@ -26,9 +28,9 @@ public:
 	}
 	~Vector() {
 		delete[] data;
-		data = NULL;
+		data = nullptr;
 	}
-	Vector& operator=(const Vector& v) {
+	Vector& operator=(Vector const & v) {
 		// Check for self-assignment:
 		//
 		if (this == &v)
@@ -74,7 +76,7 @@ public:
 	}
 	// agrega un elemento al final:
 	//
-	void push_back(const T& value) {
+	void push_back(T const & value) {
 		if (used == allocated)
 			reserve(allocated + chop_size);
 		data[used] = value;
@@ -82,7 +84,7 @@ public:
 	}
 	// llena el vector con count copias de valor value
 	//
-	void assign(size_t count, const T& value) {
+	void assign(size_t count, T const & value) {
 		if (count > allocated)
 			reserve(count);
 		used = count;
@@ -92,14 +94,14 @@ public:
 	// reserva espacio para new_capacity elementos
 	//
 	void reserve(size_t new_capacity) {
-		if (new_capacity <= allocated)
-			return ;
-		T* new_data = new T[new_capacity];
-		allocated = new_capacity;
-		for (size_t i = 0; i < used; ++i)
-			new_data[i] = data[i];
-		delete[] data;
-		data = new_data;
+		if (new_capacity > allocated) {
+			T* new_data = new T[new_capacity];
+			allocated = new_capacity;
+			for (size_t i = 0; i < used; ++i)
+				new_data[i] = data[i];
+			delete[] data;
+			data = new_data;
+		}
 	}
 	void clear() {
 		for (size_t i = 0; i < allocated; ++i)
