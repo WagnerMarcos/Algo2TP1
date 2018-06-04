@@ -117,6 +117,7 @@ print_msg_and_exit(string const & msg)
 int
 main(int argc, char * const argv[])
 {
+	std::cerr << sizeof(long double) << std::endl << sizeof(Complex<long double>) << endl;
 	program_name = argv[0];
 	cmdline cmdl(options);
 	cmdl.parse(argc, argv);
