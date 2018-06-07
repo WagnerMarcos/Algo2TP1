@@ -107,11 +107,10 @@ namespace {
 
 	// Probar que operator/() funcione
 	TEST_F(ComplexTest, Division) {
-		for (size_t i = 0, j = vectorSize -1; i < vectorSize && j >= 0; ++i, --j) {
-			if(stdComplex[j] != 0.0l && myComplex[j] != 0.0l) {
-				EXPECT_EQ(stdComplex[i] / stdComplex[j], myComplex[i] / myComplex[j]);
-			}
-		}
+		for (size_t i = 0, j = vectorSize-1; i < vectorSize && j >= 0; ++i, --j)
+			if(stdComplex[j] != 0.0l && myComplex[j] != 0.0l)
+				EXPECT_EQ(stdComplex[i] / stdComplex[j],
+				          myComplex[i] / myComplex[j]);
 	}
 
 	// Probar que Complex::conj() funcione

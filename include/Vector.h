@@ -13,14 +13,9 @@ class Vector {
 public:
 	Vector() : data(new T[init_size]), allocated(init_size), used(0) {
 	}
-	Vector(size_t count) : data(new T[count]), allocated(count), used(0) {
-	}
 	// Reserva espacio para count elementos y les asigna el valor value:
 	//
-	Vector(size_t count, T const & value) : data(new T[count]), allocated(count), used(count) {
-		for (size_t i = 0; i < count; ++i) {
-			data[i] = value;
-		}
+	Vector(size_t count, T const & value = 0) : data(new T[count]{value}), allocated(count), used(count) {
 	}
 	Vector(const Vector& v) : data(new T[v.used]), allocated(v.used), used(v.used) {
 		for (size_t i = 0; i < used; ++i)
