@@ -84,11 +84,9 @@ opt_method(string const &arg)
 		     << "."
 		     << endl;
 		opt_help();
-		delete chosen_method;
 		exit(1);
 	}
 	::transform = new FourierTransform(chosen_method);
-	delete chosen_method;
 }
 
 static void
@@ -112,8 +110,7 @@ choose_method (string read_method)
 		return new DFT;
 	if (read_method == "IDFT")
 		return new IDFT;
-	else 
-		return nullptr;
+	return nullptr;
 }
 
 static void
@@ -129,7 +126,6 @@ print_msg_and_exit(string const & msg)
 int
 main(int argc, char * const argv[])
 {
-	std::cerr << sizeof(long double) << std::endl << sizeof(Complex<long double>) << endl;
 	program_name = argv[0];
 	cmdline cmdl(options);
 	cmdl.parse(argc, argv);

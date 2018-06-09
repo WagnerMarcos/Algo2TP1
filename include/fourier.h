@@ -15,7 +15,9 @@ public:
 class FourierTransform {
 public:
 	FourierTransform(FourierAlgorithm *method) : _method(method) {}
-	virtual ~FourierTransform() {}
+	virtual ~FourierTransform() {
+		delete _method;
+	}
 	bool compute(ComplexVector const & input, ComplexVector & output) {
 		return _method? _method->compute(input, output) : false;
 	}
