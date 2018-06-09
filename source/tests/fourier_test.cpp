@@ -204,22 +204,23 @@ int main(int argc, char **argv) {
 	     << program_name
 	     << " -n <cantidad>). "
 	     << endl
-	     << "Luego se le aplica la transformada elegida"
+	     << "Luego se le aplica la transformada elegida "
 	     << "(por defecto se usan la FFT e IFFT; "
 	     << "la transformada a utilizar puede  ser cambiada llamando "
 	     << program_name
-	     << "-m <fast|discrete>), y al vector resultante se le aplica "
+	     << " -m <fast|discrete>), y al vector resultante se le aplica "
 	     << "la antitransformada."
 	     << endl
-	     << "Por último, se comprueba que el vector original y la antitransformada de "
-	     << "su transformada sean iguales."
+	     << "Por último, se comprueba que el vector original y "
+	     << "la antitransformada de su transformada sean iguales."
 	     << endl;
 
-	cout << "En la segunda prueba se lee vectores y sus transformadas de archivos "
-	     << "y luego se los compara a los valores obtenidos al aplicarles "
-	     << "la transformada elegida."
+	cout << "En la segunda prueba se lee vectores y sus transformadas "
+	     << "de archivos y luego se los compara a los valores obtenidos "
+	     << "al aplicarles la transformada elegida."
 	     << endl
-	     << "Se considera que dos números son iguales si su diferencia es menor o igual a "
+	     << "Se considera que dos números son iguales si "
+	     << "el módulo de su diferencia es menor o igual a "
 	     << Complex_acceptableDelta
 	     << "."
 	     << endl;
