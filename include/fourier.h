@@ -72,4 +72,5 @@ class IFFT : public Fast {
 	}
 };
 
+
 #endif	// _FOURIER_H_INCLUDED_

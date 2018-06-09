@@ -232,7 +232,5 @@ int main(int argc, char **argv) {
 	
 	delete ft;
 	delete ift;
-	delete chosen_method;
-	delete chosen_inverse_method;
 	return test_result;
 }

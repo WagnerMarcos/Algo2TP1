@@ -11,6 +11,6 @@ static void opt_input(std::string const &);
 static void opt_output(std::string const &);
 static void opt_method(std::string const &);
 static void opt_help(std::string const & = "");
-static void print_msg_and_exit(std::string const &);
-FourierAlgorithm *choose_method (std::string read_method);
+FourierAlgorithm* choose_method(std::string read_method);
+
 #endif	// _MAIN_H_INCLUDED_
