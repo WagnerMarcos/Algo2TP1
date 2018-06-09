@@ -64,7 +64,6 @@ opt_output(string const &arg)
 static void
 opt_method(string const &arg)
 {
-	FourierAlgorithm *chosen_method;
 	istringstream iss(arg);
 	string read_method;
 
@@ -74,7 +73,7 @@ opt_method(string const &arg)
 		exit(1);
 	}
 
-	chosen_method = choose_method( read_method );
+	FourierAlgorithm *chosen_method = choose_method(read_method);
 
 	if (chosen_method == nullptr) {
 		cerr << "Not a posible method: "
@@ -85,6 +84,8 @@ opt_method(string const &arg)
 		exit(1);
 	}
 	::transform = new FourierTransform(chosen_method);
+	if (!::transform)
+		exit(1);
 }
 
 static void

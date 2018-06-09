@@ -51,7 +51,7 @@ process(FourierTransform& transform, istream& is, ostream& os)
 			return false;
 		}
 		
-		line.clear(); // vacía los flags del istringstream
+		line.clear(); // vacía los flags del istringstream.
 		line.str(s);
 
 		status = load_signal(line, inSignal);
@@ -71,6 +71,9 @@ process(FourierTransform& transform, istream& is, ostream& os)
 			print_msg("Cannot write to output stream.");
 			return false;
 		}
+
+		// vacía los vectores para reutilizarlos en el siguiente ciclo. 
+
 		inSignal.clear();
 		outSignal.clear();
 	}
