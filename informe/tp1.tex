@@ -194,7 +194,7 @@
 	
 			\begin{large}
 				Curso 1 \\
-				Jueves 17 de Mayo de 2018 \\
+				Jueves 14 de Junio de 2018 \\
 			\end{large}
 		
 	\end{center}
@@ -212,14 +212,16 @@
         \subsection{Diseño del programa}
             \indent Se implementó para este programa la clase Complex y la clase Vector, ambas implementadas como templates.
             De esta forma se logra una mayor simplicidad, ya que se codifica una única función sin importar el tipo de dato que
-            se le pase como parámetro, logrando un código más mantenible. Además, a partir del uso del uso de templates se logra una
-            generalización de cada clase, ya que la misma se puede utilizar para distintos tipos de datos. Por ejemplo, la clase vector,
-            gracias a la implementación en forma de plantilla, es posible que cada instancia del vector contenga cualquier objeto, como
-            un complejo, o tipo de dato que se necesite. 
+            se le pase como parámetro, eivtando la duplicación de código y logrando un código más mantenible. Además, a partir del 
+            uso del uso de templates se logra una generalización de cada clase, ya que la misma se puede utilizar para distintos 
+            tipos de datos. Por ejemplo, la implementación de la clase Complex como plantilla permite utilizar el tipo de dato que 
+            se desee para armar el complejo, según la precisión que se requiera en la aplicación en la que se lo va a utilizar. 
+            Por otro lado, también para la clase vector, gracias a la implementación en forma de plantilla, es posible que cada 
+            instancia del vector contenga cualquier objeto, como un complejo, o tipo de dato que se necesite. 
             \\
-            \indent La clase Complex es utilizada para cargar cada uno de los datos leídos y dentro de la clase Vector se ordenan en
-            orden leído cada uno de los objetos de la clase Complex. 
-   			\\
+            \indent La clase Complex es utilizada para cargar cada uno de los datos leídos que luego se ordenan progresivamente (según el orden
+            de entrada) dentro de la clase Vector.
+            \\
 			\indent Para la clase Complex se sobrecargaron los operadores correspondientes a la suma, resta, multiplicación, 
 			división, los cuales son utilizados en la implementación de todas las transformadas. Además se sobrecargaron los operadores
 			de asignación, negación y comparación. De esta forma se logra un código más mantenible y legible. Por otro lado para 
@@ -228,25 +230,36 @@
 			\indent Por último, se utilizó el código provisto para el manejo de argumentos,	realizando los cambios necesarios para que 
 			parsee el archivo de señales, de forma que lea una señal por línea.
 
-		\subsection{Patrón de diseño}
+		\subsection{Patrón de diseño y jerarquía de clases}
 			
+			\indent Se utilizó para este proyecto el patrón de diseño Strategy. Esto permite reutilizar código y proporciona
+			al usuario una misma interfaz que, gracias a la implementación realizada del método, asegura un correcto funcionamiento
+			sin importar la transformada utilizada. Según el método elegido el constructor de FourierTransform recibirá un puntero a 
+			una subclase de FourierAlgorithm. Esta subclase de FourierAlgorithm ejecutará la función \textit{\_compute()} con el
+			coeficiente correspondiente.
+			\\
+			\indent Resulta importante detallar la jerarquía de clases de la implementación realizada a partir de este patrón de diseño.
+			Se implementaron las clases abstractas FourierTransform y FourierAlgorithm, las cuales indican que se las distintas
+			implementaciones de la trasnformación de Fourier pueden utilizar el método Compute pero no definen su implementación. 
+			Dichas clases abstractas, que no pueden ser instanceadas, se usan como clases bases para Discrete y Fast, que son subclases 
+			de la clase FourierAlgorithm, y definen su propia implementación de la función Compute que se utiliza para realizar 
+			la transformación. A su vez, tanto Discrete como Fast definen que sus clases hijas van a utilizar el método Coefficient, pero
+			la implementación de dicha función la realiza la clase que hereda. 
+
+
 			\begin{figure}[H]
 				\centering
 					\includegraphics[scale=0.55]{diagrama_de_clases.jpg}
 				\caption{Diagrama de clases según el lenguaje unificado de modelado UML}
 			\end{figure}
 			
-
-			\indent Se utilizó para este proyecto el patrón de diseño Strategy. Esto permite reutilizar código y proporciona
-			al usuario una misma interfaz que asegura un correcto funcionamiento sin importar la transformada utilizada. Según
-			el método elegido el constructor de FourierTransform recibirá un puntero a una subclase de FourierAlgorithm. Esta subclase de FourierAlgorithm ejecutará la función \textit{\_compute()} con el coeficiente correspondiente.
-
 		\subsection{Diseño del algoritmo de la transformada rápida de Fourier}
 			\indent La transformada rápida de Fourier se realizó de manera recursiva con el método dividir y conquistar, aprovechando 
-			la propiedad de las raíces complejas de la unidad y su periodicidad, que permite computar la DFT en tiempo \textit{O(nlg(n))},
-			en lugar de \textit{O(n²)}. El requisito para esto es que el número de entradas sea una potencia de 2. Al realizar dividir
-			y conquistar se divide en cada pasada recursiva a los elementos en posiciones par y a los posicionados en numeros impares, 
-			y se los procesa por separado, logrando reducir la cantidad de operaciones totales.   
+			la propiedad de las raíces complejas de la unidad y su periodicidad, que permite computar la DFT en tiempo \textit{O(n.lg(n))},
+			en lugar de \textit{O(n²)}, siendo n el número de muestras de la señal de entrada a transformar. El requisito para esto es
+			que el número de entradas sea una potencia de 2. Al realizar dividir y conquistar se divide en cada pasada recursiva a los 
+			elementos en posiciones par y a los posicionados en numeros impares, y se los procesa por separado, logrando reducir
+			la cantidad de operaciones totales.   
 
 
 		\subsection{Interfaz}
@@ -268,8 +281,9 @@
 	\section{Corridas de prueba}
 	 
 		\indent Las pruebas realizadas son similares a las realizadas en el proyecto anterior. Solo se agregaron las pruebas 
-		correspondientes al procesamiento de datos con FFT e IFFT. Estas pruebas permitieron determinar que el tiempo de 
-		procesamiento de la transformada rápida de Fourier es mil veces mas rápida que la transformada discreta de Fourier. 
+		correspondientes al procesamiento de datos con FFT e IFFT. Estas pruebas permitieron determinar, a partir de comparaciones
+		de los tiempos de ejecución de cada prueba, que el tiempo de procesamiento de la transformada rápida de Fourier es mil 
+		veces mas rápida que la transformada discreta de Fourier. 
 		\\
 		\indent En las pruebas realizadas con un número de entradas diferente a una potencia de dos el resultado varía al 
 		desarrollado por la DFT al rellenar con ceros los complejos faltantes.
@@ -300,14 +314,14 @@
 
 	\section{Problemas durante el desarrollo y soluciones}
 		
-        \indent Al realizar el algoritmo de un proceso tan complejo como la transformada rápida de Fourier se desarrollaron varios
+        \indent Al realizar el algoritmo de un proceso tan complejo como la transformada rápida de Fourier se presentaron diferentes
         problemas y contratiempos hasta que se pudo lograr una versión del algoritmo funcional. Estos errores fueron causados por el
         uso de la recursividad en un algoritmo del cual desconocíamos su funcionamiento. Los valores en el exponente en \textit{coefficient()} 
         y el desarrollo de la función inversa fue lo que más confusión causó.
         \\
-        \indent Por otro lado, utilizando Valgrind se verificó que no hubiera fuga de memoria. Inicialmente había un uso incorrecto de
-        memoria dinámica lo cual provocó que el programa pise memoria que no le correspondia. Gracias a este diagnóstico se pudo diseñar 
-        el programa de forma correcta.
+        \indent Por otro lado, se utilizó como herramienta Valgrind para poder verificar que no hubiera fugas de memoria. Inicialmente había 
+        un uso incorrecto de memoria dinámica lo cual provocó que el programa pise memoria que no le correspondia. Gracias a este diagnóstico 
+        se pudo diseñar el programa de forma correcta.
 
    
 
